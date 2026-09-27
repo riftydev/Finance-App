@@ -1,18 +1,31 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { palette } from '../constants/palette';
+import { fonts, palette } from '../constants/palette';
+import { DesktopIcon } from '../components/desktop-icon';
+import { Taskbar } from '../components/taskbar';
+
+//when made sprites add sprite={require('../../assets/sprites/wallet.png')}  to the desktop icon component
+
 
 export default function Desktop() {
   return (
     <View style={styles.screen}>
       <SafeAreaView style={styles.desktop} edges={['top']}>
-        <Text style={styles.placeholder}>Desktop icons will go here</Text>
+        <View style={styles.iconColumns}>
+          <View style={styles.column}>                            
+            <DesktopIcon label="Wallet" color={palette.latte} />
+            <DesktopIcon label="Ledger" color={palette.sage} />
+            <DesktopIcon label="Control Panel" color={palette.latte}/>
+          </View>
+
+          <View style={[styles.column, styles.rightColumn]}>
+            <DesktopIcon label="Recycle Bin" color={palette.latte} />
+          </View>
+        </View>
       </SafeAreaView>
 
       <SafeAreaView style={styles.taskbar} edges={['bottom']}>
-        <View style={styles.taskbarInner}>
-          <Text style={styles.taskbarText}>Taskbar</Text>
-        </View>
+        <Taskbar />
       </SafeAreaView>
     </View>
   );
@@ -27,8 +40,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  placeholder: {
-    color: palette.latte,
+  iconColumns: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  column: {
+    alignItems: 'center',
+  },
+  rightColumn: {
+    justifyContent: 'flex-end',
   },
   taskbar: {
     backgroundColor: palette.espresso,
@@ -40,5 +61,6 @@ const styles = StyleSheet.create({
   },
   taskbarText: {
     color: palette.foam,
+    fontFamily: fonts.pixel,
   },
 });

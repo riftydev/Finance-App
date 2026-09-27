@@ -6,6 +6,7 @@ import { Taskbar } from '../components/taskbar';
 import { Window } from '../components/window';
 import { AppId, apps } from '../constants/apps';
 import { fonts, palette } from '../constants/palette';
+import { StartMenu } from '../components/start-menu';
 
 // When sprites are made, add them in src/constants/apps.ts, e.g. sprite: require('../../assets/sprites/wallet.png')
 
@@ -15,6 +16,7 @@ export default function Desktop() {
 
   const [openApps, setOpenApps] = useState<AppId[]>([]);
   const [minimizedApps, setMinimizedApps] = useState<AppId[]>([]);
+  const [isStartOpen, setIsStartOpen] = useState(false);
   function openApp(id: AppId) {
     setOpenApps((current) => [...current.filter((a) => a !== id), id]);
     setMinimizedApps((current) => current.filter((a) => a !== id));
@@ -42,6 +44,17 @@ export default function Desktop() {
     } else {
       openApp(id);
     }
+  }
+
+    function openFromStart(id: AppId) {
+    openApp(id);
+    setIsStartOpen(false);
+  }
+
+  function shutDown() {
+    setOpenApps([]);
+    setMinimizedApps([]);
+    setIsStartOpen(false);
   }
 
   const leftApps = apps.filter((app) => app.id !== 'recycleBin');
@@ -97,10 +110,24 @@ export default function Desktop() {
               </Window>
             );
           })}
+
+        {isStartOpen && (
+          <StartMenu
+            onOpenApp={openFromStart}
+            onShutDown={shutDown}
+            onClose={() => setIsStartOpen(false)}
+          />
+        )}
+
       </SafeAreaView>
 
       <SafeAreaView style={styles.taskbar} edges={['bottom']}>
-        <Taskbar openApps={openApps} isCompact={isCompact} onAppPress={toggleFromTaskbar} />
+        <Taskbar
+          openApps={openApps}
+          isCompact={isCompact}
+          onStartPress={() => setIsStartOpen((open) => !open)}
+          onAppPress={toggleFromTaskbar}
+        />
       </SafeAreaView>
     </View>
   );

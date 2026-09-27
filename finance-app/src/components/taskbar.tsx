@@ -62,7 +62,7 @@ export function Taskbar({ openApps = [], isCompact = false, onStartPress, onAppP
         </Pressable>
 
         {apps
-          .filter((app) => app.pinned)
+          .filter((app) => app.pinned || openApps.includes(app.id))
           .map((app) => (
             <TaskbarApp
               key={app.id}
